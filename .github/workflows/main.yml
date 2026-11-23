@@ -1,0 +1,46 @@
+name: build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  ios:
+    runs-on: xcode-27
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        working-directory: ios
+        run: xcodegen generate
+      - name: Build unsigned app and package ipa
+        working-directory: ios
+        run: |
+          xcodebuild -project USBTransfer.xcodeproj -scheme USBTransfer \
+            -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+          mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/USBTransfer.app Payload/
+          zip -qry USBTransfer.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: USBTransfer-ipa
+          path: ios/USBTransfer.ipa
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyinstaller
+      - name: Build exe
+        working-directory: windows
+        run: pyinstaller --onefile --noconsole --name USBTransfer usb_pull_gui.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: USBTransfer-exe
+          path: windows/dist/USBTransfer.exe
