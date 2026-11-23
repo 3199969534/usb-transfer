@@ -1,0 +1,23 @@
+name: USBTransfer
+options:
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  USBTransfer:
+    type: application
+    platform: iOS
+    sources:
+      - USBTransferApp.swift
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: USB传输
+        UILaunchScreen: {}
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        NSPhotoLibraryAddUsageDescription: 用于把电脑传来的照片和视频保存到相册
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.usbtransfer
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
