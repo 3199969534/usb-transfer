@@ -2,6 +2,7 @@ name: USBTransfer
 options:
   deploymentTarget:
     iOS: "16.0"
+  developmentLanguage: zh-Hans
 targets:
   USBTransfer:
     type: application
@@ -13,6 +14,8 @@ targets:
       path: Info.plist
       properties:
         CFBundleDisplayName: USB传输
+        CFBundleDevelopmentRegion: zh-Hans
+        CFBundleLocalizations: [zh-Hans, en]
         UILaunchScreen: {}
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
